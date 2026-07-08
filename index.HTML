@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UZA 볼링클럽 - 최강자전 명예의 전당</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; background: #f8f9fa; padding: 15px; margin: 0; text-align: center; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px 20px; border-radius: 16px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); box-sizing: border-box; }
+        .logo-container { margin-bottom: 25px; text-align: center; width: 100%; }
+        .logo-container img { max-width: 85%; width: 280px; height: auto; display: inline-block; object-fit: contain; }
+        .title-badge { display: inline-block; background: linear-gradient(135deg, #ffe0b2, #ffb74d); color: #e65100; font-weight: bold; padding: 6px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 8px; }
+        h2 { font-size: 24px; color: #ff8000; margin: 0 0 25px 0; font-weight: 900; letter-spacing: -1px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        
+        .fame-list { display: flex; flex-direction: column; gap: 12px; }
+        
+        /* 모바일 줄넘김 방지 스타일 적용 */
+        .fame-card { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            background: #ffffff; 
+            border: 2px solid #fff3e0; 
+            border-radius: 12px; 
+            padding: 12px 15px; 
+            box-shadow: 0 3px 6px rgba(255, 128, 0, 0.04); 
+            box-sizing: border-box; 
+            transition: all 0.2s ease;
+            gap: 10px;
+            flex-wrap: nowrap; /* 핵심: 절대 줄바꿈 하지 마라 */
+        }
+        
+        .fame-card.active { cursor: pointer; border-color: #ffb74d; }
+        .fame-card.active:hover { background: #fffcf8; transform: translateY(-2px); box-shadow: 0 5px 12px rgba(255, 128, 0, 0.1); }
+        
+        .fame-month { 
+            font-size: 14px; 
+            font-weight: bold; 
+            color: #ff8000; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            flex-shrink: 0; 
+            white-space: nowrap;
+        }
+        .fame-month span { font-size: 16px; }
+        
+        .fame-info { 
+            text-align: right; 
+            flex-shrink: 0; 
+            white-space: nowrap; 
+        }
+        
+        .fame-name { font-size: 15px; font-weight: bold; color: #222; margin-bottom: 2px; }
+        .fame-score { font-size: 12px; color: #666; font-weight: bold; }
+        .fame-score strong { color: #e74c3c; font-size: 14px; }
+
+        /* 모달 스타일 유지 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
+        .modal-content { background: white; width: 100%; max-width: 480px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.25s ease; display: flex; flex-direction: column; max-height: 80vh; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        .modal-header { background: #ff8000; color: white; padding: 15px 20px; font-size: 18px; font-weight: bold; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .modal-close { background: none; border: none; color: white; font-size: 22px; cursor: pointer; font-weight: bold; }
+        
+        .modal-body { padding: 10px 20px 20px 20px; overflow-y: auto; text-align: left; }
+        .score-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .score-table th, .score-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #eee; }
+        .score-table th { background: #fdf2e9; color: #e65100; font-weight: bold; font-size: 14px; }
+        .score-table td { font-size: 15px; color: #444; }
+        
+        .score-table tr.rank-1 { background: #fffcf0; font-weight: bold; }
+        .score-table tr.rank-1 td { color: #ff8000; }
+        
+        .fame-modal-strong { color: #e74c3c; font-size: 14px; font-weight: bold; }
+        .score-table tr.rank-1 .fame-modal-strong { color: #ff8000; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-container">
+        <img src="https://github.com/zofldu-netizen/UZA_Bowling/blob/main/KakaoTalk_20260706_155923831.png?raw=true" alt="UZA 볼링클럽">
+    </div>
+    
+    <div class="title-badge">🏆 TOP SCORE COUNTER</div>
+    <h2>UZA 최강자전</h2>
+    
+    <div class="fame-list">
+        <div class="fame-card" id="card-7-2"><div class="fame-month"><span>👑</span> 7월 2주차</div><div class="fame-info"><div class="fame-name" id="name-7-2">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-7-2">-</strong></div></div></div>
+        <div class="fame-card" id="card-7-4"><div class="fame-month"><span>👑</span> 7월 4주차</div><div class="fame-info"><div class="fame-name" id="name-7-4">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-7-4">-</strong></div></div></div>
+        <div class="fame-card" id="card-8-2"><div class="fame-month"><span>👑</span> 8월 2주차</div><div class="fame-info"><div class="fame-name" id="name-8-2">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-8-2">-</strong></div></div></div>
+        <div class="fame-card" id="card-8-4"><div class="fame-month"><span>👑</span> 8월 4주차</div><div class="fame-info"><div class="fame-name" id="name-8-4">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-8-4">-</strong></div></div></div>
+        <div class="fame-card" id="card-9-2"><div class="fame-month"><span>👑</span> 9월 2주차</div><div class="fame-info"><div class="fame-name" id="name-9-2">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-9-2">-</strong></div></div></div>
+        <div class="fame-card" id="card-9-4"><div class="fame-month"><span>👑</span> 9월 4주차</div><div class="fame-info"><div class="fame-name" id="name-9-4">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-9-4">-</strong></div></div></div>
+        <div class="fame-card" id="card-10-2"><div class="fame-month"><span>👑</span> 10월 2주차</div><div class="fame-info"><div class="fame-name" id="name-10-2">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-10-2">-</strong></div></div></div>
+        <div class="fame-card" id="card-10-4"><div class="fame-month"><span>👑</span> 10월 4주차</div><div class="fame-info"><div class="fame-name" id="name-10-4">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-10-4">-</strong></div></div></div>
+        <div class="fame-card" id="card-11-2"><div class="fame-month"><span>👑</span> 11월 2주차</div><div class="fame-info"><div class="fame-name" id="name-11-2">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-11-2">-</strong></div></div></div>
+        <div class="fame-card" id="card-11-4"><div class="fame-month"><span>👑</span> 11월 4주차</div><div class="fame-info"><div class="fame-name" id="name-11-4">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-11-4">-</strong></div></div></div>
+        <div class="fame-card" id="card-12-2"><div class="fame-month"><span>👑</span> 12월 2주차</div><div class="fame-info"><div class="fame-name" id="name-12-2">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-12-2">-</strong></div></div></div>
+        <div class="fame-card" id="card-12-4"><div class="fame-month"><span>👑</span> 12월 4주차</div><div class="fame-info"><div class="fame-name" id="name-12-4">데이터 로딩 중...</div><div class="fame-score">총점: <strong id="score-12-4">-</strong></div></div></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="scoreModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span id="modalTitle">주차별 기록판</span>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <table class="score-table">
+                <thead><tr><th>순위</th><th>이름</th><th>총점</th><th>핸디</th></tr></thead>
+                <tbody id="modalTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNcd4n_F-M7Dmiv0u3AOur2zmhjxt3jDnxFFJv9nUgOeqLCaRD_DrmgyjlcUxOkJPYAA/exec";
+    let weekScoresData = {}; 
+
+    async function loadFameData() {
+        try {
+            const res = await fetch(WEB_APP_URL);
+            const data = await res.json();
+            const targets = [
+                { key: "7-2", header: "7월2주차", label: "7월 2주차" }, { key: "7-4", header: "7월4주차", label: "7월 4주차" },
+                { key: "8-2", header: "8월2주차", label: "8월 2주차" }, { key: "8-4", header: "8월4주차", label: "8월 4주차" },
+                { key: "9-2", header: "9월2주차", label: "9월 2주차" }, { key: "9-4", header: "9월4주차", label: "9월 4주차" },
+                { key: "10-2", header: "10월2주차", label: "10월 2주차" }, { key: "10-4", header: "10월4주차", label: "10월 4주차" },
+                { key: "11-2", header: "11월2주차", label: "11월 2주차" }, { key: "11-4", header: "11월4주차", label: "11월 4주차" },
+                { key: "12-2", header: "12월2주차", label: "12월 2주차" }, { key: "12-4", header: "12월4주차", label: "12월 4주차" }
+            ];
+            
+            let globalWinners = [];
+            targets.forEach(target => {
+                let members = [];
+                data.forEach(row => {
+                    let score = parseInt(row[target.header] || 0);
+                    if(score > 0) {
+                        let handi = parseInt(row["핸디"] || row["핸디캡"] || 0);
+                        members.push({ name: row["이름"], score, handi });
+                    }
+                });
+                members.sort((a,b) => b.score - a.score || a.handi - b.handi);
+                weekScoresData[target.key] = { label: target.label, list: members };
+
+                let top = members[0] || { name: "대기 중..", score: "-" };
+                const cardEl = document.getElementById(`card-${target.key}`);
+                document.getElementById(`name-${target.key}`).textContent = top.name;
+                document.getElementById(`score-${target.key}`).textContent = top.score;
+                
+                if(members.length > 0) { cardEl.classList.add('active'); cardEl.onclick = () => openModal(target.key); }
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    function openModal(key) {
+        document.getElementById('modalTitle').textContent = weekScoresData[key].label + " 기록판";
+        let tbody = document.getElementById('modalTableBody');
+        tbody.innerHTML = "";
+        weekScoresData[key].list.forEach((m, i) => {
+            tbody.innerHTML += `<tr class="${i==0?'rank-1':''}"><td>${i+1}등</td><td>${m.name}</td><td><span class="fame-modal-strong">${m.score}</span></td><td><span class="fame-modal-strong">${m.handi}</span></td></tr>`;
+        });
+        document.getElementById('scoreModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('scoreModal').style.display = 'none'; }
+    window.onload = loadFameData;
+</script>
+</body>
+</html>
