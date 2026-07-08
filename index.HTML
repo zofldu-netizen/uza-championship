@@ -1,0 +1,117 @@
+HTML
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UZA 볼링클럽 - 최강자전 명예의 전당</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; background: #f8f9fa; padding: 15px; margin: 0; text-align: center; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px 20px; border-radius: 16px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); box-sizing: border-box; }
+        
+        /* 🍊 상단 클럽 로고 영역 */
+        .logo-container { margin-bottom: 25px; text-align: center; width: 100%; }
+        .logo-container img { 
+            max-width: 85%; 
+            width: 280px; 
+            height: auto; 
+            display: inline-block; 
+            object-fit: contain;
+        }
+        
+        /* 🏆 제목 타이틀 디자인 */
+        .title-badge { display: inline-block; background: linear-gradient(135deg, #ffe0b2, #ffb74d); color: #e65100; font-weight: bold; padding: 6px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 8px; }
+        h2 { font-size: 24px; color: #ff8000; margin: 0 0 25px 0; font-weight: 900; letter-spacing: -1px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        
+        /* 📊 명예의 전당 리스트 스타일 */
+        .fame-list { display: flex; flex-direction: column; gap: 12px; }
+        .fame-card { display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 2px solid #fff3e0; border-radius: 12px; padding: 12px 20px; box-shadow: 0 3px 6px rgba(255, 128, 0, 0.04); transition: transform 0.2s; position: relative; overflow: hidden; box-sizing: border-box; }
+        
+        /* 월별 및 주차 표시 (왼쪽) */
+        .fame-month { font-size: 16px; font-weight: bold; color: #ff8000; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+        .fame-month span { font-size: 18px; }
+        
+        /* 유저 및 점수 정보 (오른쪽) */
+        .fame-info { text-align: right; }
+        .fame-name { font-size: 16px; font-weight: bold; color: #222; margin-bottom: 2px; }
+        .fame-score { font-size: 12px; color: #666; font-weight: bold; }
+        .fame-score strong { color: #e74c3c; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 🍊 UZA 클럽 로고 -->
+    <div class="logo-container">
+        <img src="https://github.com/zofldu-netizen/UZA_Bowling/blob/main/KakaoTalk_20260706_155923831.png?raw=true" alt="UZA 볼링클럽">
+    </div>
+    
+    <div class="title-badge">🏆 TOP SCORE COUNTER</div>
+    <h2>UZA 최강자전</h2>
+    
+    <!-- 7월 2주차 ~ 12월 4주차 리스트 틀 -->
+    <div class="fame-list">
+        <!-- 7월 -->
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 7월 2주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">홍길동</div><div class="fame-score">총점: <strong>685</strong> 점</div></div>
+        </div>
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 7월 4주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">이영희</div><div class="fame-score">총점: <strong>650</strong> 점</div></div>
+        </div>
+
+        <!-- 8월 -->
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 8월 2주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">김철수</div><div class="fame-score">총점: <strong>710</strong> 점</div></div>
+        </div>
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 8월 4주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+
+        <!-- 9월 -->
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 9월 2주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 9월 4주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+
+        <!-- 10월 -->
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 10월 2주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 10월 4주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+
+        <!-- 11월 -->
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 11월 2주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 11월 4주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+
+        <!-- 12월 -->
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 12월 2주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+        <div class="fame-card">
+            <div class="fame-month"><span>👑</span> 12월 4주차 왕중왕 진출자</div>
+            <div class="fame-info"><div class="fame-name">경기 대기 중</div><div class="fame-score">총점: <strong>-</strong> 점</div></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
