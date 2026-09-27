@@ -167,21 +167,7 @@
             const globalWinners = [];
 
             targets.forEach(target => {
-                const cardEl = document.getElementById(`card-${target.key}`);
-                const nameEl = document.getElementById(`name-${target.key}`);
-                const scoreEl = document.getElementById(`score-${target.key}`);
 
-                // 🟡 9월 4주차 전용 예외 처리 ("추석🟡" 표시)
-                if (target.key === "9-4") {
-                    if (nameEl && scoreEl && cardEl) {
-                        nameEl.textContent = "추석!";
-                        scoreEl.textContent = "-";
-                        cardEl.classList.remove('active');
-                        cardEl.onclick = null;
-                    }
-                    return; // 9월 4주차 데이터 집계는 건너뜁니다.
-                }
-                
                 let maxScore = -1;
                 let currentWinner = "";
                 let hasAnyScore = false;
