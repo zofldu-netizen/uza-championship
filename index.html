@@ -251,7 +251,19 @@
                         cardEl.onclick = null;
                     }
                 }
-            });
+          });
+
+            // 💡 [안전한 수정] 기존 로직 다 돈 뒤, 9월 4주차만 강제로 추석! 처리
+            const card94 = document.getElementById('card-9-4');
+            const name94 = document.getElementById('name-9-4');
+            const score94 = document.getElementById('score-9-4');
+            if (name94 && score94 && card94) {
+                name94.textContent = "한가위🟡";
+                score94.textContent = "-";
+                card94.classList.remove('active');
+                card94.onclick = null;
+            }
+
         } catch (error) {
             console.error("UZA최강자전 정렬 방식 업데이트 에러:", error);
         }
