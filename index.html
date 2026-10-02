@@ -11,13 +11,13 @@
         .logo-container img { max-width: 85%; width: 280px; height: auto; display: inline-block; object-fit: contain; }
         .title-badge { display: inline-block; background: linear-gradient(135deg, #ffe0b2, #ffb74d); color: #e65100; font-weight: bold; padding: 6px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 8px; }
         h2 { font-size: 24px; color: #ff8000; margin: 0 0 25px 0; font-weight: 900; letter-spacing: -1px; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        
+
         .fame-list { display: flex; flex-direction: column; gap: 12px; }
         .fame-card { display: flex; align-items: center; justify-content: space-between; background: #ffffff; border: 2px solid #fff3e0; border-radius: 12px; padding: 12px 20px; box-shadow: 0 3px 6px rgba(255, 128, 0, 0.04); box-sizing: border-box; transition: all 0.2s ease; }
-        
+
         .fame-card.active { cursor: pointer; border-color: #ffb74d; }
         .fame-card.active:hover { background: #fffcf8; transform: translateY(-2px); box-shadow: 0 5px 12px rgba(255, 128, 0, 0.1); }
-        
+
         .fame-month { font-size: 16px; font-weight: bold; color: #ff8000; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
         .fame-month span { font-size: 18px; }
         .fame-info { text-align: right; }
@@ -29,20 +29,20 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; }
         .modal-content { background: white; width: 100%; max-width: 480px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.25s ease; display: flex; flex-direction: column; max-height: 80vh; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
+
         .modal-header { background: #ff8000; color: white; padding: 15px 20px; font-size: 18px; font-weight: bold; text-align: left; display: flex; justify-content: space-between; align-items: center; }
         .modal-close { background: none; border: none; color: white; font-size: 22px; cursor: pointer; font-weight: bold; }
-        
+
         .modal-body { padding: 10px 20px 20px 20px; overflow-y: auto; text-align: left; }
         .score-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .score-table th, .score-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid #eee; }
         .score-table th { background: #fdf2e9; color: #e65100; font-weight: bold; font-size: 14px; }
         .score-table td { font-size: 15px; color: #444; }
-        
+
         /* 1등 행 강조 색상 */
         .score-table tr.rank-1 { background: #fffcf0; font-weight: bold; }
         .score-table tr.rank-1 td { color: #ff8000; }
-        
+
         /* 총점과 핸디 폰트 스타일 통일 정의 */
         .fame-modal-strong { color: #e74c3c; font-size: 14px; font-weight: bold; }
         .score-table tr.rank-1 .fame-modal-strong { color: #ff8000; } /* 1등일 때의 강렬한 주황 강조 */
@@ -54,10 +54,10 @@
     <div class="logo-container">
         <img src="https://github.com/zofldu-netizen/UZA_Bowling/blob/main/KakaoTalk_20260706_155923831.png?raw=true" alt="UZA 볼링클럽">
     </div>
-    
+
     <div class="title-badge">🏆 TOP SCORE COUNTER</div>
     <h2>UZA 최강자전</h2>
-    
+
     <div class="fame-list">
         <!-- 7월 -->
         <div class="fame-card" id="card-7-2">
@@ -143,9 +143,8 @@
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNcd4n_F-M7Dmiv0u3AOur2zmhjxt3jDnxFFJv9nUgOeqLCaRD_DrmgyjlcUxOkJPYAA/exec";
-    
-    let originData = [];
-    let weekScoresData = {}; 
+
+    let weekScoresData = {};
 
     async function loadFameData() {
         try {
@@ -153,7 +152,6 @@
             const data = await response.json();
 
             if (!Array.isArray(data)) return;
-            originData = data;
 
             const targets = [
                 { key: "7-2", header: "7월2주차", label: "7월 2주차" }, { key: "7-4", header: "7월4주차", label: "7월 4주차" },
@@ -185,7 +183,7 @@
                     if (scoreValue !== undefined && scoreValue !== null && scoreValue !== "") {
                         const score = parseInt(scoreValue, 10);
                         const name = row["이름"] ? String(row["이름"]).trim() : "";
-                        
+
                         let handi = 0;
                         for (let prop in row) {
                             if (prop.replace(/\s+/g, '') === "핸디" || prop.replace(/\s+/g, '') === "핸디캡") {
@@ -202,7 +200,7 @@
 
                         // 누적 상반기 선발자 제외 처리 (메인 진출자 선정 로직 유지)
                         if (name !== "" && globalWinners.includes(name)) {
-                            return; 
+                            return;
                         }
 
                         if (!isNaN(score) && score > maxScore && name !== "") {
@@ -212,12 +210,12 @@
                     }
                 });
 
-                // 💡 [정렬 조건 변경] 총점 높은 순 ➔ 총점이 같으면 핸디캡 낮은(작은) 순 정렬
+                // 총점 높은 순 → 총점이 같으면 핸디캡 낮은(작은) 순 정렬
                 membersInWeek.sort((a, b) => {
                     if (b.score !== a.score) {
-                        return b.score - a.score; // 총점 우선 정렬
+                        return b.score - a.score;
                     }
-                    return a.handi - b.handi; // 동점 시 핸디 적은 사람이 우선
+                    return a.handi - b.handi;
                 });
 
                 weekScoresData[target.key] = {
@@ -229,43 +227,42 @@
                 const nameEl = document.getElementById(`name-${target.key}`);
                 const scoreEl = document.getElementById(`score-${target.key}`);
 
-                if (nameEl && scoreEl && cardEl) {
-                    if (maxScore > 0 && currentWinner !== "") {
-                        globalWinners.push(currentWinner);
-                        nameEl.textContent = currentWinner;
-                        scoreEl.textContent = maxScore;
-                        
-                        cardEl.classList.add('active');
-                        cardEl.onclick = () => openModal(target.key);
-                    } 
-                    else if (!hasAnyScore) {
-                        nameEl.textContent = "경기 대기중..";
-                        scoreEl.textContent = "-";
-                        cardEl.classList.remove('active');
-                        cardEl.onclick = null;
-                    } 
-                    else {
-                        nameEl.textContent = "점수 집계중...";
-                        scoreEl.textContent = "-";
-                        cardEl.classList.remove('active');
-                        cardEl.onclick = null;
-                    }
-                }
-          });
+                if (maxScore > 0 && currentWinner !== "") {
+                    globalWinners.push(currentWinner);
+                    nameEl.textContent = currentWinner;
+                    scoreEl.textContent = maxScore;
 
-            // 💡 [안전한 수정] 기존 로직 다 돈 뒤, 9월 4주차만 강제로 추석! 처리
+                    cardEl.classList.add('active');
+                    cardEl.onclick = () => openModal(target.key);
+                }
+                else if (!hasAnyScore) {
+                    nameEl.textContent = "경기 대기중..";
+                    scoreEl.textContent = "-";
+                    cardEl.classList.remove('active');
+                    cardEl.onclick = null;
+                }
+                else {
+                    nameEl.textContent = "점수 집계중...";
+                    scoreEl.textContent = "-";
+                    cardEl.classList.remove('active');
+                    cardEl.onclick = null;
+                }
+            });
+
+            // 기존 로직 유지: 9월 4주차는 추석으로 강제 표시
             const card94 = document.getElementById('card-9-4');
             const name94 = document.getElementById('name-9-4');
             const score94 = document.getElementById('score-9-4');
-            if (name94 && score94 && card94) {
-                name94.textContent = "한가위🟡";
-                score94.textContent = "-";
-                card94.classList.remove('active');
-                card94.onclick = null;
-            }
+            name94.textContent = "한가위🟡";
+            score94.textContent = "-";
+            card94.classList.remove('active');
+            card94.onclick = null;
 
         } catch (error) {
-            console.error("UZA최강자전 정렬 방식 업데이트 에러:", error);
+            console.error("UZA최강자전 데이터 로딩 에러:", error);
+            // 로딩 실패 시 화면에 표시 (기존에는 '데이터 로딩 중...' 그대로 멈춤)
+            document.querySelectorAll('.fame-name').forEach(el => { el.textContent = "연결 실패 😢"; });
+            document.querySelectorAll('.fame-score strong').forEach(el => { el.textContent = "-"; });
         }
     }
 
@@ -273,24 +270,22 @@
         const modal = document.getElementById('scoreModal');
         const titleEl = document.getElementById('modalTitle');
         const tbody = document.getElementById('modalTableBody');
-        
+
         if (!weekScoresData[key] || weekScoresData[key].list.length === 0) return;
 
         titleEl.textContent = `🏆 ${weekScoresData[key].label} 전체 점수 기록판`;
-        tbody.innerHTML = ""; 
+        tbody.innerHTML = "";
 
         weekScoresData[key].list.forEach((member, index) => {
             const tr = document.createElement('tr');
-            if (index === 0) tr.classList.add('rank-1'); 
+            if (index === 0) tr.classList.add('rank-1');
 
-            const displayHandi = member.handi !== undefined ? member.handi : 0;
-
-            // 표시 순서 변경: 순위 / 이름 / 총점 / 핸디 (핸디에 총점과 동일한 fame-modal-strong 클래스 부여)
+            // 표시 순서: 순위 / 이름 / 총점 / 핸디
             tr.innerHTML = `
                 <td>${index + 1}등</td>
                 <td>${member.name}</td>
                 <td><span class="fame-modal-strong">${member.score}</span> 점</td>
-                <td><span class="fame-modal-strong">${displayHandi}</span> 점</td>
+                <td><span class="fame-modal-strong">${member.handi}</span> 점</td>
             `;
             tbody.appendChild(tr);
         });
