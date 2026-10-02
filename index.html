@@ -43,6 +43,12 @@
         .score-table tr.rank-1 { background: #fffcf0; font-weight: bold; }
         .score-table tr.rank-1 td { color: #ff8000; }
 
+        /* 🌕 한가위 사진 갤러리 스타일 */
+        .gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.45); color: white; border: none; border-radius: 50%; width: 38px; height: 38px; font-size: 16px; cursor: pointer; z-index: 2; }
+        #galleryPrev { left: 8px; }
+        #galleryNext { right: 8px; }
+        .gallery-dot { cursor: pointer; font-size: 12px; margin: 0 4px; }
+
         /* 총점과 핸디 폰트 스타일 통일 정의 */
         .fame-modal-strong { color: #e74c3c; font-size: 14px; font-weight: bold; }
         .score-table tr.rank-1 .fame-modal-strong { color: #ff8000; } /* 1등일 때의 강렬한 주황 강조 */
@@ -141,12 +147,43 @@
     </div>
 </div>
 
+<!-- 🌕 한가위 사진 갤러리 모달 -->
+<div class="modal-overlay" id="photoModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>🌕 한가위</span>
+            <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+            <div id="galleryContainer" style="position: relative; overflow: hidden; border-radius: 12px;">
+                <img id="galleryImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="한가위" style="width: 100%; border-radius: 12px; display: block;">
+                <button id="galleryPrev" class="gallery-arrow" onclick="changePhoto(-1)">◀</button>
+                <button id="galleryNext" class="gallery-arrow" onclick="changePhoto(1)">▶</button>
+            </div>
+            <div id="galleryCounter" style="margin-top: 8px; font-size: 13px; color: #999; font-weight: bold;"></div>
+            <div id="galleryDots" style="margin-top: 4px;"></div>
+        </div>
+    </div>
+</div>
+
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxNcd4n_F-M7Dmiv0u3AOur2zmhjxt3jDnxFFJv9nUgOeqLCaRD_DrmgyjlcUxOkJPYAA/exec";
 
     let weekScoresData = {};
 
+    function setupHangawiCard() {
+        // 9월 4주차는 추석으로 표시 + 클릭 시 사진 팝업 (데이터 로딩과 무관하게 항상 적용)
+        const card94 = document.getElementById('card-9-4');
+        const name94 = document.getElementById('name-9-4');
+        const score94 = document.getElementById('score-9-4');
+        name94.textContent = "한가위🟡";
+        score94.textContent = "-";
+        card94.classList.add('active');
+        card94.onclick = () => openPhotoModal();
+    }
+
     async function loadFameData() {
+        setupHangawiCard();
         try {
             const response = await fetch(WEB_APP_URL);
             const data = await response.json();
@@ -249,20 +286,15 @@
                 }
             });
 
-            // 기존 로직 유지: 9월 4주차는 추석으로 강제 표시
-            const card94 = document.getElementById('card-9-4');
-            const name94 = document.getElementById('name-9-4');
-            const score94 = document.getElementById('score-9-4');
-            name94.textContent = "한가위🟡";
-            score94.textContent = "-";
-            card94.classList.remove('active');
-            card94.onclick = null;
+            // 9월 4주차는 추석으로 고정 (데이터가 있어도 덮어씀)
+            setupHangawiCard();
 
         } catch (error) {
             console.error("UZA최강자전 데이터 로딩 에러:", error);
             // 로딩 실패 시 화면에 표시 (기존에는 '데이터 로딩 중...' 그대로 멈춤)
             document.querySelectorAll('.fame-name').forEach(el => { el.textContent = "연결 실패 😢"; });
             document.querySelectorAll('.fame-score strong').forEach(el => { el.textContent = "-"; });
+            setupHangawiCard();
         }
     }
 
@@ -297,10 +329,67 @@
         document.getElementById('scoreModal').style.display = 'none';
     }
 
+    // 🌕 한가위 사진 목록 (사진 추가 시 여기에 URL만 추가)
+    const HANGAWI_PHOTOS = [
+        "https://github.com/zofldu-netizen/uza-championship/blob/main/hangawi.svg?raw=true",
+        "https://github.com/zofldu-netizen/uza-championship/blob/main/hangawi2.svg?raw=true"
+    ];
+    let galleryIndex = 0;
+
+    function openPhotoModal() {
+        galleryIndex = 0;
+        updateGallery();
+        document.getElementById('photoModal').style.display = 'flex';
+    }
+
+    function changePhoto(dir) {
+        galleryIndex = (galleryIndex + dir + HANGAWI_PHOTOS.length) % HANGAWI_PHOTOS.length;
+        updateGallery();
+    }
+
+    function updateGallery() {
+        document.getElementById('galleryImg').src = HANGAWI_PHOTOS[galleryIndex];
+        document.getElementById('galleryCounter').textContent = `${galleryIndex + 1} / ${HANGAWI_PHOTOS.length}`;
+        const dots = document.getElementById('galleryDots');
+        dots.innerHTML = '';
+        HANGAWI_PHOTOS.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'gallery-dot';
+            dot.textContent = '●';
+            dot.style.color = i === galleryIndex ? '#ff8000' : '#ddd';
+            dot.onclick = () => { galleryIndex = i; updateGallery(); };
+            dots.appendChild(dot);
+        });
+        const multi = HANGAWI_PHOTOS.length > 1;
+        document.getElementById('galleryPrev').style.display = multi ? 'block' : 'none';
+        document.getElementById('galleryNext').style.display = multi ? 'block' : 'none';
+        document.getElementById('galleryDots').style.display = multi ? 'block' : 'none';
+        document.getElementById('galleryCounter').style.display = multi ? 'block' : 'none';
+    }
+
+    // 모바일 스와이프로 사진 넘기기
+    (function() {
+        const container = document.getElementById('galleryContainer');
+        let startX = 0;
+        container.addEventListener('touchstart', e => { startX = e.changedTouches[0].clientX; }, { passive: true });
+        container.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 40) changePhoto(dx < 0 ? 1 : -1);
+        }, { passive: true });
+    })();
+
+    function closePhotoModal() {
+        document.getElementById('photoModal').style.display = 'none';
+    }
+
     window.onclick = function(event) {
         const modal = document.getElementById('scoreModal');
         if (event.target == modal) {
             modal.style.display = 'none';
+        }
+        const photoModal = document.getElementById('photoModal');
+        if (event.target == photoModal) {
+            photoModal.style.display = 'none';
         }
     }
 
